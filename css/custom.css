@@ -1,0 +1,62 @@
+.container-fluid{
+	padding: 0px;
+}
+.leaflet-container{
+	background: #D5F0FD;
+}
+#loading{
+    position: absolute;
+    z-index: 99999;
+    width: 100%;
+    text-align: center;
+}
+#loader{
+    height: 280px;
+    margin-top: 10px;
+}
+.municipality{
+	stroke: #cacaca;
+	fill: #e8e6e6;
+	cursor: pointer;
+	/*fill-opacity: 0.6;*/
+}
+#tooltip {                      
+    position:absolute;
+    z-index:999;
+    font-size:14px;
+    color: #1a1a1a;       
+    background-color: rgba(245,245,245,1);
+    border-radius: 3px;
+    padding: 2px;       
+}    
+#tooltip:empty {
+    display:none;
+}
+path {
+  -webkit-transition: fill 200ms linear;
+}
+
+/* blues */
+/* ===== */
+/*.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }*/
+
+/* grays */
+/* ===== */
+.q0-9 { fill:#ffffff; }
+.q1-9 { fill:#f0f0f0; }
+.q2-9 { fill:#d9d9d9; }
+.q3-9 { fill:#bdbdbd; }
+.q4-9 { fill:#969696; }
+.q5-9 { fill:#737373; }
+.q6-9 { fill:#525252; }
+.q7-9 { fill:#252525; }
+.q8-9 { fill:#000000; }
+
