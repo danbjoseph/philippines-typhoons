@@ -1,25 +1,163 @@
-.container-fluid{
+.txt-primary {
+    color: #f0f0f0;
+}
+.txt-secondary {
+    color: #B0ABA0;
+}
+.txt-tertiary {
+    color:#636363;
+}
+#year-lower, #year-upper {
+    font-size: 130%;
+    font-weight: bold;
+}
+
+
+.container-fluid, .col-custom{
 	padding: 0px;
 }
-.leaflet-container{
-	background: #D5F0FD;
+.clickable{
+    cursor: pointer;
 }
-#loading{
-    position: absolute;
-    z-index: 99999;
-    width: 100%;
+#infoWrapper{
+    overflow: auto;
+    background: #111;
+}
+#infoText{
+    padding: 20px;
+}
+.glyphicon-custom {
+    position: static;
+    cursor: pointer;
+    font-size: 14px;
+}
+.legend-stormintensity {
+    display: inline-block;
+    width: 16px;
+    height: 4px;
+    margin-bottom: 3px;
+}
+.legend-colorbox {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+}
+.legend-colorbox2 {
+    display: inline-block;
+    width: 11%;
+    height: 12px;
+    border:1px solid white;
+}
+#populationcolorscale {
+    border: 2px solid #f5f5f5;
+}
+
+#year-range {
+    width: 90%;
+    margin: 0px auto;
+}
+.noUi-connect{
+    background: #6d6e70;
+}
+
+.datatoggle{
+    font-size: 110%;
+}
+.datasource{
+    color:#6d6e70;
+}
+
+.leaflet-container{
+	/*background: #D5F0FD;*/
+    background: #111;
+
+}
+
+
+#loading-wrapper{
+    position:absolute;
+    left:0;
+    right:0;
+    height:100%;
     text-align: center;
+    z-index: 99999;
+    background: rgba(0,0,0,0.6);
 }
 #loader{
-    height: 280px;
-    margin-top: 10px;
+    width: 150px;
+    margin: 30px 0;
 }
+#loading-progress{
+    margin:30px auto;
+    width: 210px;
+    border-radius: 4px;
+    background: #222;
+    text-align: center;
+}
+
+
 .municipality{
-	stroke: #cacaca;
-	fill: #e8e6e6;
+	stroke: #757571;
+	fill: #434341;
+    stroke-width: 0.5px;
 	cursor: pointer;
 	/*fill-opacity: 0.6;*/
 }
+.otherCountry{
+    stroke: #111;
+    fill: #404040;   
+}
+.stormpath{
+    cursor: pointer;
+    opacity: 0.6;
+}
+.stormpath.active{
+    stroke-width: 9px;
+    opacity: 1.0;
+} 
+.intensityMissing{
+    stroke: #DBDBDB;
+    opacity: 0.4;
+    stroke-width: 2px;
+}
+.td{
+    stroke: #00FAF4;
+    opacity: 0.4;
+    stroke-width: 3px;
+}
+.ts{
+    stroke: #5EBAFF;
+    opacity: 0.4;
+    stroke-width: 4px;
+}
+.c1{
+    stroke: #feb24c;
+    background: #feb24c;
+    stroke-width: 5px;
+}
+.c2{
+    stroke: #fd8d3c;
+    background: #fd8d3c;
+    stroke-width: 5px;   
+}
+.c3{
+    stroke: #fc4e2a;
+    background: #fc4e2a;
+    stroke-width: 6px;    
+}
+.c4{
+    stroke: #e31a1c;
+    background: #e31a1c;
+    stroke-width: 7px;    
+}
+.c5{
+    stroke: #b10026;
+    background: #b10026;
+    stroke-width: 8px;   
+}
+
+
 #tooltip {                      
     position:absolute;
     z-index:999;
@@ -36,9 +174,13 @@ path {
   -webkit-transition: fill 200ms linear;
 }
 
+
+.popcolor{
+    stroke: none;
+}
 /* blues */
 /* ===== */
-/*.q0-9 { fill:rgb(247,251,255); }
+.q0-9 { fill:rgb(247,251,255); }
 .q1-9 { fill:rgb(222,235,247); }
 .q2-9 { fill:rgb(198,219,239); }
 .q3-9 { fill:rgb(158,202,225); }
@@ -46,11 +188,21 @@ path {
 .q5-9 { fill:rgb(66,146,198); }
 .q6-9 { fill:rgb(33,113,181); }
 .q7-9 { fill:rgb(8,81,156); }
-.q8-9 { fill:rgb(8,48,107); }*/
+.q8-9 { fill:rgb(8,48,107); }
+
+.q0-9 { background:rgb(247,251,255); }
+.q1-9 { background:rgb(222,235,247); }
+.q2-9 { background:rgb(198,219,239); }
+.q3-9 { background:rgb(158,202,225); }
+.q4-9 { background:rgb(107,174,214); }
+.q5-9 { background:rgb(66,146,198); }
+.q6-9 { background:rgb(33,113,181); }
+.q7-9 { background:rgb(8,81,156); }
+.q8-9 { background:rgb(8,48,107); }
 
 /* grays */
 /* ===== */
-.q0-9 { fill:#ffffff; }
+/*.q0-9 { fill:#ffffff; }
 .q1-9 { fill:#f0f0f0; }
 .q2-9 { fill:#d9d9d9; }
 .q3-9 { fill:#bdbdbd; }
@@ -58,5 +210,15 @@ path {
 .q5-9 { fill:#737373; }
 .q6-9 { fill:#525252; }
 .q7-9 { fill:#252525; }
-.q8-9 { fill:#000000; }
+.q8-9 { fill:#000000; }*/
+
+/*.q0-9 { background:#ffffff; }
+.q1-9 { background:#f0f0f0; }
+.q2-9 { background:#d9d9d9; }
+.q3-9 { background:#bdbdbd; }
+.q4-9 { background:#969696; }
+.q5-9 { background:#737373; }
+.q6-9 { background:#525252; }
+.q7-9 { background:#252525; }
+.q8-9 { background:#000000; }*/
 

@@ -5,17 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--     <link rel="icon" href="img/favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/> -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
 
-    <title>Philippines risk mapping</title>
+    <title>Philippines and typhoons</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/jquery.nouislider.min.css" rel="stylesheet">
     <link href="css/leaflet.css" rel="stylesheet">
     <link href="css/Control.Loading.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
-
-
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,18 +27,115 @@
 
   <body>
 
+    <div id="disclaimer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <!-- <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        </div> -->
+  
+        <div class="modal-body">
+          <p><strong>Storm data:</strong> International Best Track Archive for Climate Stewardship (<a style="color:#6abed8;" target="_blank" href="http://www.ncdc.noaa.gov/ibtracs/index.php?name=ibtracs-data">IBTrACS-All data v03r06, West Pacific Basin</a>)</p>
+          <p><i>IBTrACS reports 10-min maximum sustained winds, so the traditional Saffir-Simpson categories were converted to 10-min using a scaling factor of 0.88 for the purpose of classification when color coding on the map.</i></p>
+          <p><strong>Poverty data:</strong> World Bank/AusAID/NSCB Project on the Generation of the 2009 Small Area Estimates of Poverty (<a style="text-decoration:none; color:#6abed8;" target="_blank" href="http://www.nscb.gov.ph/poverty/2009_SAE/2009%20FINAL%20sae.pdf">PDF source</a>)</p>
+          <p><strong>Population data:</strong> 2010 Census, Philippine Statistics Authority (PSA)</p>
+          <p><strong>World boundaries:</strong> Natural Earth (<a style="text-decoration:none; color:#6abed8;" target="_blank" href="http://www.naturalearthdata.com/downloads/110m-cultural-vectors/">1:110m</a>)</p>
+          <p><strong>Note:</strong> The site author makes no claims as to the accuracy of any of the data sources. The maps used do not imply the expression of any opinion concerning the legal status of a territory or of its authorities.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        </div>
+
+        </div>
+      </div>  
+    </div>
+
 
     <div id="tooltip"></div>
-    <div id="loading"><img id="loader" src="img/ajax_loader_gray_512.gif" /></div>
 
+    <div id="loading-wrapper">
+      <div id="loading-progress">
+        <img id="loader" src="img/loading.gif" />
+      </div>
+    </div>
 
     <div class="container-fluid">
-      <div id="map"></div>
+      <div class="col-xs-7 col-custom">
+        <div id="map"></div>
+      </div>
+      <div id="infoWrapper" class="col-xs-5 col-custom">
+
+
+        <div id="infoText" >
+          <h2 class="txt-primary">Philippines and typhoons
+            &nbsp;<small><span onClick="$('#disclaimer-modal').modal();" class="glyphicon glyphicon-info-sign clickable txt-secondary"></span></small>
+          </h2>
+          <div style="height:10px;"></div>
+                
+          <h4 class="txt-primary">Storm data from <span id="year-lower">X</span> 
+            <!-- to <span id="year-upper">Y</span> -->
+          </h4>
+        
+          <div id="year-range"></div>
+
+          <br>
+
+          <div class="txt-tertiary">
+          <span class="legend-stormintensity c5"></span>
+            Five <small>&nbsp;(≥252 km/h)</small><br>
+          <span class="legend-stormintensity c4"></span>
+            Four <small>&nbsp;(209–251 km/h)</small><br>
+          <span class="legend-stormintensity c3"></span>
+            Three <small>&nbsp;(178–208 km/h)</small><br>
+          <span class="legend-stormintensity c2"></span>
+            Two <small>&nbsp;(154–177 km/h)</small><br>
+          <span class="legend-stormintensity c1"></span>
+            One <small>&nbsp;(119–153 km/h)</small><br>
+          <span class="legend-stormintensity ts"></span>
+            Tropical storm <small>&nbsp;(63–118 km/h)</small><br>
+          <span class="legend-stormintensity td"></span>
+            Tropical depression <small>&nbsp;(≤62 km/h)</small><br>
+          </div>
+
+
+          <div style="height:10px;"></div>
+
+          <h4 class="txt-primary"><span onClick="togglePoverty(this);" class="glyphicon glyphicon-eye-close glyphicon-custom txt-secondary"></span>&nbsp; Poverty Incidence <small>(2009)</small></h4>
+
+            <div id="legend-poverty" class="txt-tertiary" style="display:none;">
+              <span class="legend-colorbox" style="background-color:#1a9641"></span>&nbsp; &lt; 20% <br>
+              <span class="legend-colorbox" style="background-color:#a6d96a"></span>&nbsp; 20 - 29.9% <br>
+              <span class="legend-colorbox" style="background-color:#ffffbf"></span>&nbsp; 30 - 39.9% <br>
+              <span class="legend-colorbox" style="background-color:#fdae61"></span>&nbsp; 40 - 49.9% <br>
+              <span class="legend-colorbox" style="background-color:#d7191c"></span>&nbsp; &gt; 50% 
+            </div>
+        
+          <div style="height:10px;"></div> 
+
+          <h4 class="txt-primary"><span onClick="togglePopulation(this);" class="glyphicon glyphicon-eye-close glyphicon-custom legend-off txt-secondary"></span>&nbsp; Population data <small>(2010)</small></h4>
+
+            <div id="legend-population" class="txt-tertiary" style="display:none;">
+              <div><span  class="legend-colorbox2 q0-9"></span><span class="legend-colorbox2 q1-9"></span><span class="legend-colorbox2 q2-9"></span><span class="legend-colorbox2 q3-9"></span><span class="legend-colorbox2 q4-9"></span><span class="legend-colorbox2 q5-9"></span><span class="legend-colorbox2 q6-9"></span><span class="legend-colorbox2 q7-9"></span><span class="legend-colorbox2 q8-9"></span></div>
+              <div><span id="label-popmin">xx,xxx</span><span id="label-popmax" class="pull-right">x,xxx,xxx</span></div>
+            </div>
+
+          
+          
+          
+                             
+          
+          
+
+        </div>
+
+
+      </div>
       
     </div> <!-- /.container-fluid -->
 
     <script src="js/jquery.min.js"></script>
-    <script src="js/simple-statistics.js"></script>
+    <script src="js/jquery.nouislider.all.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="js/Control.Loading.js"></script>
