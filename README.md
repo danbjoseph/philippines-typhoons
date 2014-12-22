@@ -1,6 +1,7 @@
-Philippines risk mapping
+Philippines and typhoons
 ========================
 
+http://danbjoseph.github.io/philippines-typhoons/
 
 **Technology Used:**
 - [D3.js](http://d3js.org/) v3.5.2

@@ -118,6 +118,7 @@
 } 
 .intensityMissing{
     stroke: #DBDBDB;
+    background: #DBDBDB;
     opacity: 0.4;
     stroke-width: 2px;
 }
@@ -125,11 +126,13 @@
     stroke: #00FAF4;
     opacity: 0.4;
     stroke-width: 3px;
+    background: #00FAF4;
 }
 .ts{
     stroke: #5EBAFF;
     opacity: 0.4;
     stroke-width: 4px;
+    background: #5EBAFF;
 }
 .c1{
     stroke: #feb24c;
