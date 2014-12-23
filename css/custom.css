@@ -30,19 +30,9 @@
     margin-bottom: 0px;
 }
 
-.leaflet-bar a,
-.leaflet-bar a:hover {
-    background-color: #2b2b2b;
-    border-color: #000;
-    color: #f0f0f0;
+.leaflet-container{
+    background: #111;
 }
-
-#povertyBubbles circle {
-    stroke: #f5f5f5;
-    fill-opacity: 0.7;
-    stroke-opacity:0.2;
-}
-
 .container-fluid, .col-custom{
 	padding: 0px;
 }
@@ -60,6 +50,9 @@
     position: static;
     cursor: pointer;
     font-size: 14px;
+}
+.datatoggle{
+    font-size: 110%;
 }
 .legend-stormintensity {
     display: inline-block;
@@ -82,24 +75,9 @@
 #populationcolorscale {
     border: 2px solid #f5f5f5;
 }
-
 #year-range {
     width: 90%;
     margin: 0px auto;
-}
-
-
-.datatoggle{
-    font-size: 110%;
-}
-.datasource{
-    color:#6d6e70;
-}
-
-.leaflet-container{
-	/*background: #D5F0FD;*/
-    background: #111;
-
 }
 
 
@@ -124,6 +102,12 @@
     text-align: center;
 }
 
+
+#povertyBubbles circle {
+    stroke: #f5f5f5;
+    fill-opacity: 0.7;
+    stroke-opacity:0.2;
+}
 
 .municipality{
 	stroke: #757571;
@@ -281,10 +265,21 @@ path {
 
 
 
+/* leaflet zoom control dark styling */
+/* ================================= */
+.leaflet-bar a,
+.leaflet-bar a:hover {
+    background-color: #2b2b2b;
+    border-color: #000;
+    color: #f0f0f0;
+}
+.leaflet-bar a.leaflet-disabled {
+    background-color: #2b2b2b;
+    color: #000;
+}
 
 /* slider styling */
 /* ============== */
-
 .noUi-connect{
     background: #6d6e70;
 }
@@ -303,7 +298,7 @@ path {
     border-radius: 3px;
     background: #b0aba0;
     box-shadow: inset 0 0 1px #000,
-                inset 0 1px 7px #000,
+                inset 0 1px 5px #000,
                 0 3px 6px -3px #000;
 }
 .noUi-handle:before,
