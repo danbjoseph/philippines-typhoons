@@ -50,15 +50,16 @@ $("#map").height(windowH);
 $("#infoWrapper").height(windowH);
 
 var HOTAttribution = 'Base map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a> | Map style by <a href="http://hot.openstreetmap.org" target="_blank">H.O.T.</a> | <a title="Disclaimer" onClick="showDisclaimer();">Disclaimer</a>';
-// var hotUrl = 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
-var hotUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+var hotUrl = 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+// var hotUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
 
 
 var map = new L.Map("map", {
 	center: [12.351, 122.893],
 	zoom: 6,
   minZoom: 3,
-  maxZoom: 12,
+  // maxZoom: 12,
 	zoomControl: false,
   attributionControl: false,
   // maxBounds: [[3.98,114.96],[21.70,139.23]]
@@ -83,7 +84,35 @@ var loadingControl = L.Control.loading({
 });
 map.addControl(loadingControl);
 
-// L.tileLayer(hotUrl, {attribution: HOTAttribution}).addTo(map);
+var hotLayer = L.tileLayer(hotUrl, {attribution: HOTAttribution});
+hotLayer.addTo(map);
+map.removeLayer(hotLayer);
+
+
+
+function toggleOSM(toggle) {  
+  if($(toggle).hasClass("glyphicon-eye-close")){    
+    d3.select(toggle).classed({
+      'glyphicon-eye-close': false,
+      'glyphicon-eye-open': true
+    });
+    hotLayer.addTo(map);
+    municipalityGroup.selectAll("path").classed("overOSM", true);
+    worldGroup.selectAll("path").classed("overOSM", true);
+
+  } else {
+    d3.select(toggle).classed({
+      'glyphicon-eye-close': true,
+      'glyphicon-eye-open': false
+    });
+    map.removeLayer(hotLayer);
+    municipalityGroup.selectAll("path").classed("overOSM", false);
+    worldGroup.selectAll("path").classed("overOSM", false);
+  }
+
+}
+
+
 
 
 function projectPoint(x, y) {
@@ -153,9 +182,10 @@ function getGeoData(){
   
 }
 
+var population2010Lookup = {};
+
 function loadPopulationData(){
-  d3.csv("data/MunicipPopulation2010.csv", function(data) {  
-    var population2010Lookup = {};
+  d3.csv("data/MunicipPopulation2010.csv", function(data) {
     var populationLogArray = [];
     var populationArray = [];
     data.forEach(function(d) { 
@@ -191,23 +221,40 @@ function loadPovertyData(){
       .domain([20, 30, 40, 50, 100])
       .range(["#1a9641", "#a6d96a", "#ffffbf", "#fdae61", "#d7191c"]);
 
-    var povertyMarkers = povertyGroup.selectAll("circle").data(municipalitiesData).enter()
-      .append("circle").attr("r", 4).attr('stroke','#f5f5f5')
+    municipalityGroup.selectAll("path")
       .attr("data-pov2009", function(d){ return poverty2009Lookup[d.properties.ph];})
+      .on("mouseover", function(d){ 
+        $("#infoAdmin-name").html(d.properties.m + ", " + d.properties.p);
+        $("#infoAdmin-pop").html($(this).attr("data-pov2009") + "% poverty incidence");
+        $("#infoAdmin-pov").html(formatCommas($(this).attr("data-pop2010")) + " people");           
+      })
+      .on("mouseout", function(){ 
+        $("#infoAdmin-name").html("<i>Hover over a municipality</i>");
+        $("#infoAdmin-pop").empty();
+        $("#infoAdmin-pov").empty();
+      });
+
+
+    var povertyMarkers = povertyGroup.selectAll("circle").data(municipalitiesData).enter()
+      .append("circle").attr("r", 5)
+      .attr("data-pov2009", function(d){ return poverty2009Lookup[d.properties.ph];})
+      .attr("data-pop2010", function(d){return population2010Lookup[d.properties.ph];})
       .style("fill", function(d){ 
         if(poverty2009Lookup[d.properties.ph] == undefined){
           return "#6d6e70"; 
         } else {
           return color(poverty2009Lookup[d.properties.ph]); 
         }  
-      })
-      .style({"fill-opacity": 0.7, "stroke-opacity":0.2})
+      }) 
       .on("mouseover", function(d){ 
-        var tooltipText = "<strong>" + d.properties.m + ", " + d.properties.p +"<br>"+ $(this).attr("data-pov2009") + "% poverty incidence</strong>";
-        $('#tooltip').append(tooltipText);                
+        $("#infoAdmin-name").html(d.properties.m + ", " + d.properties.p);
+        $("#infoAdmin-pop").html($(this).attr("data-pov2009") + "% poverty incidence");
+        $("#infoAdmin-pov").html(formatCommas($(this).attr("data-pop2010")) + " people");           
       })
       .on("mouseout", function(){ 
-         $('#tooltip').empty()
+        $("#infoAdmin-name").html("<i>Hover over a municipality</i>");
+        $("#infoAdmin-pop").empty();
+        $("#infoAdmin-pov").empty();
       });
     function updatemarker(){
       povertyMarkers.attr("cx",function(d) { var thisLatLng = [d3.geo.centroid(d)[1], d3.geo.centroid(d)[0]]; return map.latLngToLayerPoint(thisLatLng).x;});
@@ -390,7 +437,10 @@ function togglePopulation(toggle){
       'legend-on': true,
       'glyphicon-eye-open': true
     });
-    colorByPopulation("ON");
+    municipalityGroup.selectAll("path").each(function(d){
+      var popcolorclass = d3.select(this).attr("data-popcolorclass");
+      d3.select(this).classed(popcolorclass, true).classed("popcolor", true);
+    }); 
   } else {
     d3.select(toggle).classed({
       'legend-off': true,
@@ -398,39 +448,14 @@ function togglePopulation(toggle){
       'legend-on': false,
       'glyphicon-eye-open': false
     });
-    colorByPopulation("OFF");
+    municipalityGroup.selectAll("path").each(function(d){
+      var popcolorclass = d3.select(this).attr("data-popcolorclass");
+      d3.select(this).classed(popcolorclass, false).classed("popcolor", false);
+    });
+
   }
 }
 
-function colorByPopulation(direction){
-  if(direction == "ON"){
-    municipalityGroup.selectAll("path")
-      .each(function(d){
-        var popcolorclass = d3.select(this).attr("data-popcolorclass");
-        d3.select(this).classed(popcolorclass, true).classed("popcolor", true);
-      })
-      .on("mouseover", function(d){ 
-        var tooltipText = "<strong>" + d.properties.m + ", " + d.properties.p +"<br>"+ formatCommas($(this).attr("data-pop2010")) + "</strong>";
-        $('#tooltip').append(tooltipText);                
-      })
-      .on("mouseout", function(){ 
-         $('#tooltip').empty()
-      });
-  } else {
-    municipalityGroup.selectAll("path")
-      .each(function(d){
-        var popcolorclass = d3.select(this).attr("data-popcolorclass");
-        d3.select(this).classed(popcolorclass, false).classed("popcolor", false);
-      })
-      .on("mouseover", function(d){ 
-        var tooltipText = "<strong>" + d.properties.m + ", " + d.properties.p + "</strong>";
-        $('#tooltip').append(tooltipText);                
-      })
-      .on("mouseout", function(){ 
-         $('#tooltip').empty()
-      });
-  }
-}
 
 function clickedMunicipality(e){
   // -d- is the data object

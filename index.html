@@ -57,15 +57,23 @@
 
     <div id="loading-wrapper">
       <div id="loading-progress">
-        <img id="loader" src="img/loading.gif" />
+        <img id="loader" src="img/loader.gif" />
       </div>
     </div>
 
     <div class="container-fluid">
       <div class="col-xs-7 col-custom">
+        <div id="infoAdmin">
+          <p id="infoAdmin-name" class="txt-primary"><i>Hover over a municipality</i></p>
+          <p id="infoAdmin-pop" class="txt-secondary"></p>
+          <p id="infoAdmin-pov" class="txt-secondary"></p>
+        </div>
         <div id="map"></div>
       </div>
       <div id="infoWrapper" class="col-xs-5 col-custom">
+
+
+
 
 
         <div id="infoText" >
@@ -74,7 +82,7 @@
           </h2>
           <div style="height:10px;"></div>
                 
-          <h4 class="txt-primary">Storm data from <span id="year-lower">X</span> 
+          <h4 class="txt-primary">Storm data <span id="year-lower">X</span> 
             <!-- to <span id="year-upper">Y</span> -->
           </h4>
         
@@ -104,7 +112,7 @@
 
           <div style="height:10px;"></div>
 
-          <h4 class="txt-primary"><span onClick="togglePoverty(this);" class="glyphicon glyphicon-eye-close glyphicon-custom txt-secondary"></span>&nbsp; Poverty Incidence <small>(2009)</small></h4>
+          <h4 class="txt-primary"><span onClick="togglePoverty(this);" class="glyphicon glyphicon-eye-close glyphicon-custom txt-secondary"></span>&nbsp; Poverty incidence <small>(2009)</small></h4>
 
             <div id="legend-poverty" class="txt-tertiary" style="display:none;">
               <span class="legend-colorbox" style="background-color:#1a9641"></span>&nbsp; &lt; 20% <br>
@@ -122,6 +130,10 @@
               <div><span  class="legend-colorbox2 q0-9"></span><span class="legend-colorbox2 q1-9"></span><span class="legend-colorbox2 q2-9"></span><span class="legend-colorbox2 q3-9"></span><span class="legend-colorbox2 q4-9"></span><span class="legend-colorbox2 q5-9"></span><span class="legend-colorbox2 q6-9"></span><span class="legend-colorbox2 q7-9"></span><span class="legend-colorbox2 q8-9"></span></div>
               <div><span id="label-popmin">xx,xxx</span><span id="label-popmax" class="pull-right">x,xxx,xxx</span></div>
             </div>
+
+          <div style="height:10px;"></div> 
+
+          <h4 class="txt-primary"><span onClick="toggleOSM(this);" class="glyphicon glyphicon-eye-close glyphicon-custom legend-off txt-secondary"></span>&nbsp; OpenStreetMap</h4>
 
           
           
